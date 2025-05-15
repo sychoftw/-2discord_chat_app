@@ -1,0 +1,86 @@
+
+generator client {
+  provider = "prisma-client-js"
+
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id          String       @id @default(uuid())
+  username    String       @unique
+  email       String       @unique
+  password    String
+
+  guilds      Guild[]      @relation("UserGuilds")
+  ownedGuilds Guild[]      @relation("OwnerGuilds")
+  messages    Message[]
+  privateChatsAllowed PrivateChat[] @relation("PrivateChatAccess")
+  groupMemberships     Group[]      @relation("GroupMembers")
+
+  createdPrivateChats PrivateChat[]
+
+  createdGroups Group[]
+}
+
+model Guild {
+  id           String        @id @default(uuid())
+  name         String
+  ownerId      String
+  owner        User          @relation("OwnerGuilds", fields: [ownerId], references: [id])
+  members      User[]        @relation("UserGuilds") 
+  publicChats  PublicChat[]
+  privateChats PrivateChat[]
+  groups       Group[]
+}
+
+model PublicChat {
+  id         String     @id @default(uuid())
+  name       String
+  guildId    String
+  guild      Guild      @relation(fields: [guildId], references: [id])
+  messages   Message[]
+}
+
+model PrivateChat {
+  id           String    @id @default(uuid())
+  name         String
+  guildId      String
+  guild        Guild     @relation(fields: [guildId], references: [id])
+  creatorId    String
+  creator      User      @relation(fields: [creatorId], references: [id])
+  passkey      String
+  allowedUsers User[]    @relation("PrivateChatAccess") 
+  messages     Message[]
+}
+
+model Group {
+  id         String    @id @default(uuid())
+  name       String
+  isPublic   Boolean   @default(true)
+  creatorId  String
+  creator    User      @relation(fields: [creatorId], references: [id])
+  guildId    String
+  guild      Guild     @relation(fields: [guildId], references: [id])
+  members    User[]    @relation("GroupMembers")
+  messages   Message[]
+}
+
+model Message {
+  id            String       @id @default(uuid())
+  content       String
+  createdAt     DateTime     @default(now())
+  senderId      String
+  sender        User         @relation(fields: [senderId], references: [id])
+
+  publicChatId  String?
+  publicChat    PublicChat?  @relation(fields: [publicChatId], references: [id])
+
+  privateChatId String?
+  privateChat   PrivateChat? @relation(fields: [privateChatId], references: [id])
+
+  groupId       String?
+  group         Group?       @relation(fields: [groupId], references: [id])
+}

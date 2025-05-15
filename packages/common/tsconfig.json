@@ -1,0 +1,8 @@
+{
+    "extents":"@repo/typescript-config/base.json",
+    "compilerOptions":{
+        
+        "outDir":"./dist"
+
+    }
+}
