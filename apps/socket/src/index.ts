@@ -8,16 +8,15 @@ const wss = new WebSocketServer({ port: 8080 });
 
 
 wss.on('connection', function connection(ws, req) {
-  //@ts-ignore
-  ws.send('something')
+    //@ts-ignore
+    const token: string = url.parse(req.url, true).query.token;
 
-   ws.on('message', function message(data, isBinary) {
-    wss.clients.forEach(function each(client) {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(data, { binary: isBinary });
-      }
-    });
-  });
+
+  ws.send("connection");
+   console.log("this is the token ----",token)
+
+  console.log("this is the websocket ----",ws)
+
 });
 
 console.log('done');

@@ -1,4 +1,4 @@
-{
+{"extents":"@repo/typescript-config/base.json",
   "compilerOptions": {
     "module": "Node16",               // ✅ Must match moduleResolution
     "moduleResolution": "Node16",     // ✅ Enables modern resolution
