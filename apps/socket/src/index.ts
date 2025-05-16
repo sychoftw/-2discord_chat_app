@@ -1,19 +1,19 @@
 import { WebSocketServer } from 'ws';
 
 import url from 'url';
+import UserExtraction from './auth/auth';
 
 
 const wss = new WebSocketServer({ port: 8080 });
 
 
 
-wss.on('connection', function connection(ws, req) {
+wss.on('connection',async function connection(ws, req) {
     //@ts-ignore
     const token: string = url.parse(req.url, true).query.token;
-
-
+    const userDetail=await UserExtraction(token);
   ws.send("connection");
-   console.log("this is the token ----",token)
+   console.log(userDetail)
 
   console.log("this is the websocket ----",ws)
 

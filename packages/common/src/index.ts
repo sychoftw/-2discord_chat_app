@@ -1,1 +1,2 @@
-export const VALUE ="ROHIT"
+
+export const JWT_SECRET="ROHIT"

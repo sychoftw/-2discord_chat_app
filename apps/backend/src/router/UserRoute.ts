@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { db } from '../db';
 import bcrypt from "bcrypt"
+import {JWT_SECRET} from "@repo/common/config"
 
 const router = Router();
 
@@ -37,7 +38,7 @@ router.post('/signup', async (req: Request, res: Response) => {
       username: resp.username,
       email: resp.email
     },
-    "rohit",
+    JWT_SECRET,
     { expiresIn }
   );
 
