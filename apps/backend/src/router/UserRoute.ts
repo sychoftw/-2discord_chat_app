@@ -55,4 +55,54 @@ router.post('/signup', async (req: Request, res: Response) => {
   return
 });
 
+
+
+//singin
+router.post('/signin', async (req: Request, res: Response) => {
+  const {  password, email } = req.body;
+
+  const user = await db.user.findUnique({
+    where: {
+      email
+    }
+  });
+
+  if (!user) {
+     res.status(400).json({
+      message: "need to sign up first"
+    });
+    return
+  }
+  const validPassword = await bcrypt.compare(password, user.password);
+
+  if (!validPassword) {
+    res.status(400).json({ message: "Invalid credentials" });
+    return;
+  }
+
+  
+
+  const expiresIn = '2h';
+  const token = jwt.sign(
+    {
+      username: user.username,
+      email: user.email
+    },
+    JWT_SECRET,
+    { expiresIn }
+  );
+
+ 
+   res.status(201).json({
+    message: "user logged in successfully",
+    token,
+    user: {
+      id: user.id,
+      username: user.username,
+      email: user.email
+    }
+  });
+  return
+});
+
 export default router; 
