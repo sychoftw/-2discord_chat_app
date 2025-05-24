@@ -44,7 +44,7 @@ router.post('/signup', async (req: Request, res: Response) => {
 
  
    res.status(201).json({
-    message: "User created successfully",
+    message: "User created successfullyyy",
     token,
     user: {
       id: resp.id,
@@ -54,9 +54,6 @@ router.post('/signup', async (req: Request, res: Response) => {
   });
   return
 });
-
-
-
 //singin
 router.post('/signin', async (req: Request, res: Response) => {
   const {  password, email } = req.body;
